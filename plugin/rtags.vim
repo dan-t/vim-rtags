@@ -632,6 +632,7 @@ endfunction
 """
 function! RtagsCompleteFunc(findstart, base)
     call rtags#Log("RtagsCompleteFunc: [".a:findstart."], [".a:base."]")
+    set completeopt=menuone,longest
     if a:findstart
         " got from RipRip/clang_complete
         let l:line = getline('.')

@@ -659,7 +659,7 @@ function! RtagsCompleteFunc(findstart, base)
         let completeopts = rtags#CompleteAtCursor(wordstart, a:base)
         "call rtags#Log(completeopts)
         let a = []
-        let types = ["CXXMethod", "FieldDecl", "VarDecl", "EnumConstantDecl", "ClassDecl"]
+        let types = ["CXXMethod", "FieldDecl", "VarDecl", "EnumConstantDecl", "ClassDecl", "FunctionTemplate"]
         for line in completeopts
             for type in types
                 let subLine = substitute(line, '\(.*\)' . type . '.*', '\1', '')
@@ -670,6 +670,10 @@ function! RtagsCompleteFunc(findstart, base)
             endfor
 
             let option = split(line)
+            if len(option) == 0
+              continue
+            endif
+
             if a:base != "" && stridx(option[0], a:base) != 0
                 continue
             endif

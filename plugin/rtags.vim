@@ -659,7 +659,16 @@ function! RtagsCompleteFunc(findstart, base)
         let completeopts = rtags#CompleteAtCursor(wordstart, a:base)
         "call rtags#Log(completeopts)
         let a = []
+        let types = ["CXXMethod", "FieldDecl", "VarDecl", "EnumConstantDecl", "ClassDecl"]
         for line in completeopts
+            for type in types
+                let subLine = substitute(line, '\(.*\)' . type . '.*', '\1', '')
+                if subLine != line
+                    let line = subLine
+                    break
+                endif
+            endfor
+
             let option = split(line)
             if a:base != "" && stridx(option[0], a:base) != 0
                 continue
@@ -680,8 +689,8 @@ function! RtagsCompleteFunc(findstart, base)
 
             let match = {}
             let match.word = word
-            let match.kind = option[len(option) - 1]
-            if match.kind == "CXXMethod"
+            let kind = option[len(option) - 1]
+            if kind == "CXXMethod"
                 let match.word = match.word.'('
             endif
             let match.menu = join(option[1:len(option) - 1], ' ')

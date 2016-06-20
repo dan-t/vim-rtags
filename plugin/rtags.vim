@@ -29,6 +29,10 @@ if !exists("g:rtagsMaxSearchResultWindowHeight")
     let g:rtagsMaxSearchResultWindowHeight = 10
 endif
 
+if !exists("g:rtagsExcludeCompletionSymbol")
+    let g:rtagsExcludeCompletionSymbol = []
+endif
+
 let g:SAME_WINDOW = 'same_window'
 let g:H_SPLIT = 'hsplit'
 let g:V_SPLIT = 'vsplit'
@@ -660,8 +664,22 @@ function! RtagsCompleteFunc(findstart, base)
             if a:base != "" && stridx(option[0], a:base) != 0
                 continue
             endif
+
+            let word = option[0]
+            let ignoreWord = 0
+            for exclude in g:rtagsExcludeCompletionSymbol
+                if word =~ exclude
+                    let ignoreWord = 1
+                    break
+                endif
+            endfor
+
+            if ignoreWord == 1
+                continue
+            endif
+
             let match = {}
-            let match.word = option[0]
+            let match.word = word
             let match.kind = option[len(option) - 1]
             if match.kind == "CXXMethod"
                 let match.word = match.word.'('

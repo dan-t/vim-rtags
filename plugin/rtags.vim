@@ -232,7 +232,6 @@ endfunction
 function! rtags#DisplayResults(results)
     let locations = rtags#ParseResults(a:results)
     let num_of_locations = len(locations)
-    set noautochdir
     if g:rtagsUseLocationList == 1
         call setloclist(winnr(), locations)
         if num_of_locations > 0
@@ -244,7 +243,6 @@ function! rtags#DisplayResults(results)
             exe 'copen '.min([g:rtagsMaxSearchResultWindowHeight, num_of_locations]) | set nowrap
         endif
     endif
-    set autochdir
 endfunction
 
 function! rtags#getRcCmd()

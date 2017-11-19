@@ -564,6 +564,7 @@ function! rtags#PreprocessFile()
     let result = rtags#ExecuteRC({ '-E' : expand("%:p") })
     new
     call append(0, result)
+    set filetype=cpp
 endfunction
 
 function! rtags#ReindexFile()

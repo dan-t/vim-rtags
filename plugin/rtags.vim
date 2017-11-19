@@ -137,7 +137,7 @@ function! rtags#ParseResults(results)
 
         let entry = {}
 "        let entry.bufn = 0
-        let entry.filename = substitute(file, getcwd().'/', '', 'g')
+        let entry.filename = file
         let entry.filepath = file
         let entry.lnum = lnum
 "        let entry.pattern = ''

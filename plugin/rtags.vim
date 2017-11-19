@@ -562,7 +562,7 @@ endfunction
 
 function! rtags#PreprocessFile()
     let result = rtags#ExecuteRC({ '-E' : expand("%:p") })
-    vnew
+    new
     call append(0, result)
 endfunction
 

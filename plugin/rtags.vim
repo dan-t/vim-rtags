@@ -603,12 +603,17 @@ function! rtags#CompleteAtCursor(wordStart, base)
 "    sleep 1
 "    echomsg stdin_lines
 "    sleep 1
-    " sed command to remove CDATA prefix and closing xml tag from rtags output
-    let sed_cmd = "sed -e 's/.*CDATA\\[//g' | sed -e 's/.*\\/completions.*//g'"
-    let cmd = printf("%s %s %s:%s:%s --unsaved-file=%s:%s | %s", rcRealCmd, flags, file, line, col, file, offset, sed_cmd)
+    let cmd = printf("%s %s %s:%s:%s --unsaved-file=%s:%s", rcRealCmd, flags, file, line, col, file, offset)
     call rtags#Log("Command line:".cmd)
 
-    let result = split(system(cmd, stdin_lines), '\n\+')
+    let job = job_start(cmd, { "out_mode": "raw" })
+    let channel = job_getchannel(job)
+    call ch_sendraw(channel, stdin_lines)
+    let channel_out = ch_readraw(channel, { "timeout": 5000 })
+    call rtags#Log(printf('channel_out="%s"', channel_out))
+    call job_stop(job)
+
+    let result = split(channel_out, '\n\+')
 "    echomsg "Got ".len(result)." completions"
 "    sleep 1
     call rtags#Log("-----------")

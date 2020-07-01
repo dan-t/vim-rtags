@@ -38,13 +38,6 @@ let g:H_SPLIT = 'hsplit'
 let g:V_SPLIT = 'vsplit'
 let g:NEW_TAB = 'tab'
 
-let s:LOC_OPEN_OPTS = {
-            \ g:SAME_WINDOW : '',
-            \ g:H_SPLIT : ' ',
-            \ g:V_SPLIT : 'vert',
-            \ g:NEW_TAB : 'tab'
-            \ }
-
 if g:rtagsUseDefaultMappings == 1
     autocmd FileType cpp nnoremap <Leader>ri :call rtags#SymbolInfo()<CR>
     autocmd FileType cpp nnoremap <Leader>rj :call rtags#JumpTo(g:SAME_WINDOW)<CR>
@@ -64,6 +57,15 @@ if g:rtagsUseDefaultMappings == 1
     autocmd FileType cpp nnoremap <Leader>rC :call rtags#FindSuperClasses()<CR>
     autocmd FileType cpp nnoremap <Leader>rc :call rtags#FindSubClasses()<CR>
 endif
+
+let s:LOC_OPEN_OPTS = {
+            \ g:SAME_WINDOW : '',
+            \ g:H_SPLIT : ' ',
+            \ g:V_SPLIT : 'vert',
+            \ g:NEW_TAB : 'tab'
+            \ }
+
+let s:CLASS_REGEX = '\s\+class\s\+[a-zA-Z0-9_]\+\s\+'
 
 """
 " Logging routine
@@ -183,7 +185,7 @@ function! rtags#ExtractSuperClasses(results)
             break
         endif
 
-        let extLine = substitute(line, '\s\+class\s\+[a-zA-Z0-9_]\+\s\+', '', '')
+        let extLine = substitute(line, s:CLASS_REGEX, '', '')
         call add(extracted, extLine)
     endfor
     return extracted
@@ -219,7 +221,7 @@ function! rtags#ExtractSubClasses(results)
            continue
         endif
 
-        let extLine = substitute(line, '\s\+class\s\+[a-zA-Z0-9_]\+\s\+', '', '')
+        let extLine = substitute(line, s:CLASS_REGEX, '', '')
         call add(extracted, extLine)
     endfor
     return extracted

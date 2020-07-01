@@ -65,7 +65,7 @@ let s:LOC_OPEN_OPTS = {
             \ g:NEW_TAB : 'tab'
             \ }
 
-let s:CLASS_REGEX = '\s\+class\s\+[a-zA-Z0-9_]\+\s\+'
+let s:CLASS_REGEX = '\v\s*((class)|(struct))\s+\i+\s*(\<\i\>)?\s+'
 
 """
 " Logging routine
